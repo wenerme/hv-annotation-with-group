@@ -3,108 +3,53 @@ Hibernate Validator - Constraint Annotation with Default group
 
 From [Can I add a bean validation annotation with group?](https://stackoverflow.com/questions/44366294)
 
-## Why
+## About this project
+This project is a demo that `hv-annotation-with-group`, use a lot of magic to make `@ConstraintGroup({Create.class, Modify.class}) @interface NotNullOnChange {}` this work.
 
-For RESTful api service, most time is dealing with crud, so, we follow
+This project contain full rest,dto,mapper,service,entity, the data is simulated, in real project, spring-data will replace the data layer, but the whole structure keep unchanged.   
 
-```
-GET   -> Query
-POST  -> Create
-PUT   -> Update
-PATCH -> Partial Update - Update nonnull field
-DELETE-> Delete
-```
-
-For an entity, we defined several dto, like this
-
-```
-public class UserDTO {
-
-    @Data// Used for list
-    public static class Summary {
-
-        private String id;
-        private String code;
-        private String name;
-    }
-
-    @Data// Used for getById
-    public static class Detail extends Summary {
-
-        private String phone;
-        private String department;
-        private String position;
-        private String email;
-        private String avatar;
-        private List<String> permissions;
-        private List<RoleDTO.Summary> roles;
-    }
-
-}
+## Run & Test
+```bash
+./mvnw spring-boot:run
+# Open http://localhost:8080/swagger-ui.html
+# Try 
+# user id: 1,2
+# address id: 1,2
 ```
 
+For create, and full update, `name` is required, for patch `name` is optional.
 
+## Use case
 
-## Demo
+### Share DTO with different operation
+CRUD RESTful update have PUT or PATCH, PATCH used for partial update, update nonnull field only, so, every field can be null.
 
+If Patch and Put share same DTO, with default group can code like this
 
 ```java
-@RestController
-@RequestMapping("/demo")
-@Validated
-public class DemoRest {
+@Data
+public static class Update {
 
-  @PostMapping// Some field is required
-  public Object post(@RequestBody @ValidCreate UserCreateDTO user) {
-    return "OK";
-  }
-
-  @PutMapping// Some field is required
-  public Object put(@RequestBody @ValidModify UserDTO user) {
-    return "OK";
-  }
-
-  @PatchMapping// Every field can be null
-  public Object patch(@RequestBody @ValidPatch UserDTO user) {
-    return "OK";
-  }
-
-  @Data
-  public static class UserCreateDTO extends UserDTO {
-
-    @NotEmpty
-    private String phone;
-  }
-
-  @Data
-  public static class UserDTO {
-
-    @Size(min = 1)
-    @NotNullOnChange// Required when change or create
+    @NotNullOnChange// When create or full update this is required
     private String name;
-
     private Integer age;
-  }
+    private String address;
 }
 ```
 
-```bash
-####
-# Create
-####
-# Invalid
-curl -X POST -H 'Content-Type: application/json' -d '{"name": "abc"}' http://localhost:8080/demo
-# Valid
-curl -X POST -H 'Content-Type: application/json' -d '{"name": "abc","phone":"123"}' http://localhost:8080/demo
+Valid like this
 
-####
-# Modify
-####
-# Invalid - name is required for full update
-curl -X PUT -H 'Content-Type: application/json' -d '{"age": 123}' http://localhost:8080/demo
-# Valid
-curl -X PUT -H 'Content-Type: application/json' -d '{"name":"abcd","age": 123}' http://localhost:8080/demo
+```java
+interface UserService{
+    UserEntity update(UserEntity user, @ValidModify UserDTO.Update dto);
+    UserEntity patch(UserEntity user, @ValidPatch UserDTO.Update dto);
+}
+```
 
-# Valid - Only update nonnull field
-curl -X PATCH -H 'Content-Type: application/json' -d '{}' http://localhost:8080/demo
+`@NotNullOnChange` is
+
+```java
+@NotNull
+@ConstraintGroup({Create.class, Modify.class})
+@interface NotNullOnChange {}
 ```
