@@ -4,7 +4,7 @@ Hibernate Validator - Constraint Annotation with Default group
 From [Can I add a bean validation annotation with group?](https://stackoverflow.com/questions/44366294)
 
 ## About this project
-This project is a demo that `hv-annotation-with-group`, use a lot of magic to make `@ConstraintGroup({Create.class, Modify.class}) @interface NotNullOnChange {}` this work.
+This project is a demo that `hv-annotation-with-group`, use a lot of magic to make this `@ConstraintGroup({Create.class, Modify.class}) @interface NotNullOnChange {}` work.
 
 This project contain full rest,dto,mapper,service,entity, the data is simulated, in real project, spring-data will replace the data layer, but the whole structure keep unchanged.   
 
@@ -50,6 +50,6 @@ interface UserService{
 
 ```java
 @NotNull
-@ConstraintGroup({Create.class, Modify.class})
+@ConstraintGroup({Create.class, Modify.class})// Notice this annotation
 @interface NotNullOnChange {}
 ```
