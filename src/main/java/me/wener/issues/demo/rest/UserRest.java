@@ -5,14 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import me.wener.issues.demo.Validations.ValidCreate;
-import me.wener.issues.demo.Validations.ValidModify;
-import me.wener.issues.demo.Validations.ValidPatch;
 import me.wener.issues.demo.data.dto.UserDTO;
 import me.wener.issues.demo.data.dto.UserDTO.Detail;
 import me.wener.issues.demo.data.dto.UserDTO.Summary;
 import me.wener.issues.demo.data.mapper.UserMapper;
 import me.wener.issues.demo.data.service.UserService;
+import me.wener.issues.demo.validator.ValidCreate;
+import me.wener.issues.demo.validator.ValidUpdate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,14 +54,14 @@ public class UserRest {
 
     @PutMapping("/{user}")// Some field is required
     public Map<String, Object> put(@PathVariable String user,
-        @RequestBody @ValidModify UserDTO.Update dto) {
+        @RequestBody @ValidUpdate UserDTO.Update dto) {
         userService.update(userService.require(user), dto);
         return ImmutableMap.of("code", 0);
     }
 
     @PatchMapping("/{user}")// Every field can be null
     public Map<String, Object> patch(@PathVariable String user,
-        @RequestBody @ValidPatch UserDTO.Update dto) {
+        @RequestBody @ValidUpdate UserDTO.Update dto) {
         userService.patch(userService.require(user), dto);
         return ImmutableMap.of("code", 0);
     }

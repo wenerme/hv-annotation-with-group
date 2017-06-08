@@ -1,7 +1,7 @@
 package me.wener.issues.demo.data.dto;
 
 import lombok.Data;
-import me.wener.issues.demo.Validations.NotNullOnChange;
+import me.wener.issues.demo.validator.NotNullOnCreateOrUpdate;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -36,7 +36,7 @@ public class UserDTO {
     @Data
     public static class Update {
 
-        @NotNullOnChange// When create or full update this is required
+        @NotNullOnCreateOrUpdate// When create or full update this is required
         private String name;
         private Integer age;
         private String address;

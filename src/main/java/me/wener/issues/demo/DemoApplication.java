@@ -3,6 +3,7 @@ package me.wener.issues.demo;
 import java.util.Optional;
 import javax.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
+import me.wener.issues.demo.validator.ValidatorHelper;
 import org.hibernate.validator.internal.engine.ValidatorImpl;
 import org.joor.Reflect;
 import org.springframework.boot.CommandLineRunner;
@@ -75,7 +76,7 @@ public class DemoApplication {
 
             if (target instanceof ValidatorImpl) {
                 log.info("Validator patch ValidatorImpl");
-                Validations.patchHibernateValidator(target);
+                ValidatorHelper.patchHibernateValidator(target);
             } else {
                 log.warn("Validator unsupported for patch");
             }

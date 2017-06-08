@@ -2,11 +2,11 @@ package me.wener.issues.demo.data.service;
 
 import java.util.List;
 import java.util.Optional;
-import me.wener.issues.demo.Validations.ValidCreate;
-import me.wener.issues.demo.Validations.ValidModify;
-import me.wener.issues.demo.Validations.ValidPatch;
 import me.wener.issues.demo.data.dto.UserDTO;
 import me.wener.issues.demo.data.entity.UserEntity;
+import me.wener.issues.demo.validator.ValidCreate;
+import me.wener.issues.demo.validator.ValidPatch;
+import me.wener.issues.demo.validator.ValidUpdate;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -18,7 +18,7 @@ public interface UserService {
 
     UserEntity create(@ValidCreate UserDTO.Create dto);
 
-    UserEntity update(UserEntity user, @ValidModify UserDTO.Update dto);
+    UserEntity update(UserEntity user, @ValidUpdate UserDTO.Update dto);
 
     UserEntity patch(UserEntity user, @ValidPatch UserDTO.Update dto);
 
