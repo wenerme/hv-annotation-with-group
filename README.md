@@ -84,6 +84,7 @@ I implement a meta annotation(`@ConstraintGroup`) for constraint annotation to a
 Hibernate-Validator resist to accept any change, so, I have to do very nasty things to get this work.
 
 * Code here `ValidatorHelper#patchHibernateValidator`
+* Tested on Oracle 8, OpenJDK 8
 * Use reflection to get all `MetaDataProvider` out of Validator
 * Replace all `MetaDataProvider` with a wrapper
     * Post process all `BeanConfiguration`
