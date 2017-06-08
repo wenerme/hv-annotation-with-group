@@ -1,4 +1,4 @@
-# hv-annotation-with-group
+# Constraint annotation with explicit groups [HV-1355](https://hibernate.atlassian.net/browse/HV-1355)
 Hibernate Validator - Constraint Annotation with Default group
 
 Propose to add `@ConstraintGroup`
